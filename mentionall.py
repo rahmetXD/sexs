@@ -558,7 +558,6 @@ async def start_tagging(event):
             participants = await client.get_participants(group_entity, limit=50)
 
             if participants:
-                New chat
 
 questions = [
     "Nerdesin?",
