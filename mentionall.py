@@ -12,6 +12,24 @@ import random
 import pyrogram
 from youtubesearchpython import VideosSearch
 import youtube_dl
+import platform
+from telethon.tl import types
+from telethon.tl import functions, types
+import telethon
+from datetime import datetime
+from telethon.tl import functions
+import re
+import requests
+from bs4 import BeautifulSoup
+from youtube_search import YoutubeSearch
+import requests
+import os
+from pyrogram import filters
+import os
+import asyncio
+import time
+from telethon.sync import TelegramClient, events
+
 
 
 logging.basicConfig(
@@ -523,31 +541,55 @@ async def cancel(event):
 	
 
 
-@client.on(events.NewMessage(pattern="^/admins ?(.*)"))
-async def mentionall(tagadmin):
+@client.on(events.NewMessage(pattern="/dtag"))
+async def start_tagging(event):
+    user = await event.get_sender()
+    user_first_name = user.first_name
 
-	if tagadmin.pattern_match.group(1):
-		seasons = tagadmin.pattern_match.group(1)
-	else:
-		seasons = ""
+    # Sadece gruplar ve kanallar için işlem yapın
+    if isinstance(event.chat, (types.Chat, types.Channel)):
+        # Grubun adminlerini alın
+        admins = await client.get_participants(event.chat_id, filter=ChannelParticipantsAdmins)
 
-	chat = await tagadmin.get_input_chat()
-	a_=0
-	await tagadmin.delete()
-	async for i in client.iter_participants(chat, filter=ChannelParticipantsAdmins):
-		if a_ == 500:
-			break
-		a_+=5
-		await tagadmin.client.send_message(tagadmin.chat_id, "**[{}](tg://user?id={}) {}**".format(i.first_name, i.id, seasons))
-		sleep(0.5)
+        # Eğer kullanıcı grup adminlerinden biriyse devam edin
+        if user in admins:
+            # Hedeflenen gruptaki son aktif olan 50 kişiyi alın
+            group_entity = event.chat_id
+            participants = await client.get_participants(group_entity, limit=50)
+
+            if participants:
+                questions = [
+                    "Nerdesin?",
+                    # Diğer sorular burada...
+                ]
+
+                # Katılımcıları rastgele sırayla karıştırın
+                random.shuffle(participants)
+                for i, participant in enumerate(participants):
+                    if not participant.bot and not participant.deleted:
+                        username = participant.username
+                        if username:
+                            question = random.choice(questions)  # Rastgele bir soru seçin
+                            tagged_message = f"⤇ @{username}, {question}"
+                            await event.respond(tagged_message)
+                            await asyncio.sleep(2)  # 2 saniye bekle
+                            questions.remove(question)  # Aynı soruyu birden fazla kişiye sormamak için kaldırın
+        else:
+            await event.respond("Bu komutu kullanabilmek için bir grup admini olmalısınız!")
+    else:
+        await event.respond("Bu komut yalnızca gruplar ve kanallarda kullanılabilir!")
+
+@client.on(events.NewMessage(pattern="/cancel"))
+async def cancel_tagging(event):
+    # Etiketleme işlemini iptal et
+    await event.respond(
+        "Etiketleme İşlemi İptal Edildi!",
+        buttons=[
+            [Button.url('🛡ᴏᴡɴᴇʀ🛡', 'https://t.me/rahmetiNC')]
+        ]
+    )
+
 	
-
-	
-@client.on(events.NewMessage(pattern='/durum'))
-async def handler(event):
-    await event.respond('👨‍💻 Hey! Aktifim! Bilgilerim Aşağıda.\n\n║▻  ⚙️ Versiyon [ V1 ]\n║▻  💠 Python Versiyon : 4.0.0\n║▻  💻 Telethon Versiyon : 2.0')
-
-
 
 print("Ahri Tagger AKtif, Sağol Sahip! @rahmetiNC ✨")
 client.run_until_disconnected()
