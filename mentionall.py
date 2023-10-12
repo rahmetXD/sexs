@@ -558,10 +558,38 @@ async def start_tagging(event):
             participants = await client.get_participants(group_entity, limit=50)
 
             if participants:
-                questions = [
-                    "Nerdesin?",
-                    # Diğer sorular burada...
-                ]
+                New chat
+
+questions = [
+    "Nerdesin?",
+    "Bugün hava nasıl?",
+    "Favori film karakterin kim?",
+    "En sevdiğin yemek nedir?",
+    "Hangi kitabı en son okudun?",
+    "Hangi ülkeyi ziyaret etmek istersin?",
+    "En son nerede seyahat ettin?",
+    "Hangi sporu seversin?",
+    "En sevdiğin müzik türü nedir?",
+    "Hangi hobilerin var?",
+    "En son ne zaman doğa yürüyüşü yaptın?",
+    "En iyi arkadaşın kim?",
+    "Hangi okulda okuyorsun?",
+    "Aile üyelerinin isimleri neler?",
+    "Favori spor takımın kim?",
+    "Hangi tarihi dönemi merak ediyorsun?",
+    "Düşlediğin iş nedir?",
+    "Hangi renkleri seversin?",
+    "Favori hayvanın nedir?",
+    "Hangi dilleri konuşuyorsun?",
+    "En son ne zaman bir konserdeydin?",
+    "En sevdiğin mevsim nedir?",
+    "Hangi ünlüyle tanışmak istersin?",
+    "En son hangi filmi izledin?",
+    "Favori video oyunun nedir?",
+    "En son ne zaman bir müze ziyareti yaptın?",
+    "Hangi tatil destinasyonunu önerirsin?",
+    # Buraya eklemek istediğiniz diğer soruları ekleyebilirsiniz.
+]
 
                 # Katılımcıları rastgele sırayla karıştırın
                 random.shuffle(participants)
